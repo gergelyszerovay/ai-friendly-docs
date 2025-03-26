@@ -5,18 +5,14 @@ const exec = promisify(execSync);
 
 export const getAngularLatestVersion = async () => {
     let version = "19.2.3";
+    
+    const { stdout, stderr } = await exec("npm view @angular/core version");
 
-    try {
-        const { stdout, stderr } = await exec("npm view @angular/core version");
-
-        if (stderr) {
-            throw new Error(`exec error: ${stderr}`);
-        }
-
-        version = stdout?.trim();
-    } catch (error) {
-        console.error(`exec error: ${error}`);
+    if (stderr) {
+        throw new Error(`exec error: ${stderr}`);
     }
+
+    version = stdout?.trim();
 
     return version;
 }
