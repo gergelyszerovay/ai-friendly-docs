@@ -3,6 +3,7 @@ import { HuggingFaceEmbedding } from "@llamaindex/huggingface";
 import { findMarkdownFiles } from "@shared/file-utils/findMarkdownFiles";
 import { cloneRepository } from "@shared/github/cloneRepository";
 import { createCollectionFromMarkdownFiles } from "@shared/llamaindex/createCollectionFromMarkdownFiles";
+import { getAngularLatestVersion } from "@shared/utils/get-angular-version";
 import { Settings } from "llamaindex";
 
 /**
@@ -22,14 +23,17 @@ import { Settings } from "llamaindex";
  * @see createCollectionFromMarkdownFiles for the embedding process
  */
 async function main() {
+  console.log("Retrieving latest Angular version...");
   /** Angular version to process */
-  const version = "19.2.3";
+  const version = await getAngularLatestVersion();
   /** Repository directory */
   const repoDir = `./cloned-repos/angular-${version}`;
   /** Source directory containing original Angular documentation */
   const sourceDir = `${repoDir}/adev/src/content`;
   /** Target directory where AI-friendly documentation will be written */
   const targetDir = `./ai-friendly-docs/angular-${version}`;
+
+  console.log("Latest Angular version is:", version, "\n");
 
   try {
     // Clone the Angular repository with the specified version
